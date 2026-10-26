@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Meet Monitor</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body data-page="index">
+  <header>
+    <div class="brand"><span class="brand-dot"></span> Meet Monitor</div>
+    <nav>
+      <a href="login.html" class="btn-secondary">Log in</a>
+    </nav>
+  </header>
+
+  <main class="page">
+    <section class="card hero">
+      <h1>Class presence, without the roll call.</h1>
+      <p class="muted">
+        The extension reads Google Meet participant tiles and reports who is present and
+        whether their mic is on. Students see their own status; professors see the whole class.
+      </p>
+      <div class="button-row">
+        <a class="btn-primary" href="login.html">Get started</a>
+        <a class="btn-secondary" href="professor.html">Open professor view</a>
+      </div>
+    </section>
+
+    <section class="grid-3">
+      <article class="card">
+        <h2>1. Extension</h2>
+        <p class="muted">
+          Load the unpacked extension in Chrome, then join a Meet. It scans participant tiles
+          and only sends a snapshot when something changes.
+        </p>
+      </article>
+      <article class="card">
+        <h2>2. Backend</h2>
+        <p class="muted">
+          Flask accepts snapshots at <code>/api/presence</code> and stores them in SQLite.
+          No external database or hosted service is required.
+        </p>
+      </article>
+      <article class="card">
+        <h2>3. Dashboard</h2>
+        <p class="muted">
+          Students check their own status; professors watch the class table refresh every
+          five seconds and spot muted participants instantly.
+        </p>
+      </article>
+    </section>
+  </main>
+
+  <footer>Meet Monitor &middot; proof of concept</footer>
+  <script src="script.js"></script>
+</body>
+</html>

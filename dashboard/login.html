@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Log in &middot; Meet Monitor</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body data-page="login">
+  <header>
+    <div class="brand"><span class="brand-dot"></span> Meet Monitor</div>
+    <nav>
+      <a href="index.html" class="btn-secondary">Home</a>
+    </nav>
+  </header>
+
+  <main class="page">
+    <section class="card card-narrow">
+      <h1>Log in</h1>
+      <p class="muted">Pick a role to continue. This is a demo login &mdash; no password, no OAuth.</p>
+
+      <form id="login-form" class="form" action="/login" method="post">
+        <label for="email">School email</label>
+        <input id="email" name="email" type="email" placeholder="you@school.edu" required />
+
+        <label for="role">Role</label>
+        <select id="role" name="role">
+          <option value="student">Student</option>
+          <option value="professor">Professor</option>
+        </select>
+
+        <button type="submit" class="btn-primary btn-block">Continue</button>
+      </form>
+    </section>
+  </main>
+
+  <footer>Meet Monitor &middot; proof of concept</footer>
+  <script src="script.js"></script>
+</body>
+</html>

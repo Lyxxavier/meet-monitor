@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Class presence &middot; Meet Monitor</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body data-page="professor">
+  <header>
+    <div class="brand"><span class="brand-dot"></span> Meet Monitor</div>
+    <nav>
+      <a href="student.html" class="btn-secondary">Student view</a>
+      <a href="/logout" class="btn-secondary">Log out</a>
+    </nav>
+  </header>
+
+  <main class="page">
+    <div class="page-heading">
+      <div>
+        <h1>Class presence</h1>
+        <p class="muted">Live status for everyone the extension has seen. Refreshes every 5 seconds.</p>
+      </div>
+      <span class="pill" id="refresh-state">Live</span>
+    </div>
+
+    <section class="grid-3 stats">
+      <article class="card stat">
+        <span class="stat-value" id="stat-total">0</span>
+        <span class="stat-label">Participants</span>
+      </article>
+      <article class="card stat">
+        <span class="stat-value" id="stat-active">0</span>
+        <span class="stat-label">Mic on</span>
+      </article>
+      <article class="card stat">
+        <span class="stat-value" id="stat-idle">0</span>
+        <span class="stat-label">Mic muted</span>
+      </article>
+    </section>
+
+    <p id="message" class="error" hidden></p>
+
+    <section class="card table-card">
+      <table class="professor-table" id="presence-table">
+        <thead>
+          <tr>
+            <th>Student</th>
+            <th>Status</th>
+            <th>Last update</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td colspan="3" class="empty">Loading&hellip;</td></tr>
+        </tbody>
+      </table>
+    </section>
+  </main>
+
+  <footer>Meet Monitor &middot; proof of concept</footer>
+  <script src="script.js"></script>
+</body>
+</html>

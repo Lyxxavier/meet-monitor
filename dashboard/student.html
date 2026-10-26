@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Your status &middot; Meet Monitor</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body data-page="student">
+  <header>
+    <div class="brand"><span class="brand-dot"></span> Meet Monitor</div>
+    <nav>
+      <a href="professor.html" class="btn-secondary">Professor view</a>
+      <a href="/logout" class="btn-secondary">Log out</a>
+    </nav>
+  </header>
+
+  <main class="page">
+    <div class="page-heading">
+      <div>
+        <h1>Your status</h1>
+        <p class="muted">This is what your professor's dashboard shows for you.</p>
+      </div>
+      <span class="pill" id="refresh-state">Live</span>
+    </div>
+
+    <section class="card card-narrow">
+      <h2>Your Meet display name</h2>
+      <p class="muted">
+        Presence is keyed by the name shown in Google Meet. Set it below so this page can
+        filter your own rows.
+      </p>
+      <form id="name-form" class="inline-form">
+        <input
+          id="display-name"
+          type="text"
+          placeholder="e.g. Juan Dela Cruz"
+          autocomplete="off"
+          aria-label="Google Meet display name"
+        />
+        <button type="submit" class="btn-primary">Save</button>
+      </form>
+    </section>
+
+    <p id="message" class="error" hidden></p>
+
+    <section class="card table-card">
+      <table class="professor-table" id="presence-table">
+        <thead>
+          <tr>
+            <th>Student</th>
+            <th>Status</th>
+            <th>Last update</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td colspan="3" class="empty">Loading&hellip;</td></tr>
+        </tbody>
+      </table>
+    </section>
+  </main>
+
+  <footer>Meet Monitor &middot; proof of concept</footer>
+  <script src="script.js"></script>
+</body>
+</html>
