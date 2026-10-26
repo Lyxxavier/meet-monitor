@@ -3,28 +3,40 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Log in &middot; Meet Monitor</title>
+  <meta name="theme-color" content="#131520" />
+  <title>Sign in · Meet Monitor</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body data-page="login">
-  <header>
-    <div class="brand"><span class="brand-dot"></span> Meet Monitor</div>
-    <nav>
-      <a href="index.html" class="btn-secondary">Home</a>
+  <header class="site-header">
+    <a class="brand" href="/" aria-label="Meet Monitor home">
+      <span class="brand-dot" aria-hidden="true"></span> Meet Monitor
+    </a>
+    <nav aria-label="Main navigation">
+      <a href="/" class="btn-secondary">Home</a>
     </nav>
   </header>
 
   <main class="page">
     <section class="card card-narrow">
-      <h1>Log in</h1>
+      <p class="eyebrow">Welcome to Meet Monitor</p>
+      <h1>Sign in to continue</h1>
       <p class="muted">
         Sign in with any Google account, including personal Gmail. Choose your Meet Monitor role;
         you can choose a different role the next time you sign in.
       </p>
+      <div class="role-explanations" id="role-guidance">
+        <p><strong>Student</strong><span>Check the presence row matching your Meet display name.</span></p>
+        <p><strong>Professor</strong><span>View, export, and delete all recorded meeting data.</span></p>
+      </div>
+      <p class="demo-role-notice" id="role-demo-notice">
+        Demo access: any signed-in Google account can choose either role. Professor access is not
+        restricted to verified instructors.
+      </p>
 
       <form id="login-form" class="form">
         <label for="role">Role</label>
-        <select id="role" name="role">
+        <select id="role" name="role" aria-describedby="role-guidance role-demo-notice">
           <option value="student">Student</option>
           <option value="professor">Professor</option>
         </select>
@@ -32,11 +44,11 @@
         <button type="submit" class="btn-primary btn-block">Continue with Google</button>
       </form>
       <p id="login-error" class="error" role="alert" hidden></p>
-      <p class="muted">Google confirms your account. Meet Monitor does not receive your Google password.</p>
+      <p class="muted">Google confirms your account. Meet Monitor never receives your Google password.</p>
     </section>
   </main>
 
-  <footer>Meet Monitor &middot; proof of concept</footer>
+  <footer>Meet Monitor <span aria-hidden="true">·</span> A presence monitoring demo</footer>
   <script src="script.js"></script>
 </body>
 </html>

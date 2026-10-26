@@ -6,7 +6,9 @@ A proof-of-concept attendance/presence monitor for Google Meet.
 - A small Flask backend stores those reports in SQLite.
 - A static dashboard lets students see their status and professors see a selected meeting.
 
-The UI uses a white base with red (`#D32F2F`) and yellow (`#FFC107`) accents.
+The UI uses a dark navy dashboard palette with purple highlights and red/yellow brand accents.
+The dashboards show the last successful refresh time, selected meeting details, and presence
+filters. Student matching uses the exact display name entered from Google Meet.
 Meet Monitor records attendance-related metadata only; it does not record or transmit audio or video.
 
 ## Project structure
@@ -55,9 +57,14 @@ python -m venv .venv
 .venv\Scripts\Activate.ps1
 pip install -r requirements.txt
 Copy-Item .env.example .env
-# Fill in the Google OAuth values and secrets in .env before signing in.
+# Replace the example values in .env before signing in.
 python app.py
 ```
+
+Set `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET` to your Google OAuth web client values.
+Replace `MEET_MONITOR_SECRET` and `PRESENCE_API_TOKEN` with private, randomly generated values.
+If `PRESENCE_API_TOKEN` is set, enter the same value in the extension popup. Keep `.env` private;
+never commit or share it.
 
 The API and dashboard run on <http://localhost:5000>.
 Create a Google OAuth web client and add `http://localhost:5000/auth/google/callback` as an
@@ -93,10 +100,38 @@ code from the Meet URL and uses a per-tab session key to keep separate meeting s
 ### 3. Dashboard
 
 Open <http://localhost:5000/login.html>, choose a role, and continue with Google.
-Students set their **Meet display name** on the student page so their rows can be filtered.
-The chosen role is saved to the account and can be changed on a later Google sign-in.
+Students set their **Meet display name** on the student page so their matching row can be shown;
+the name must match the one shown in Meet, including spacing. The chosen role is saved to the
+account and can be changed on a later Google sign-in. This proof of concept lets any signed-in
+Google account choose Professor; it does not verify instructor status. Professor access includes
+viewing, exporting, and deleting all recorded meeting data, so do not use it with sensitive
+attendance records.
 
-### 4. Deploy to Render
+### 4. Demo walkthrough
+
+For a live demo, use the backend and dashboard together with the unpacked extension:
+
+1. Start the backend and sign in to the dashboard with a Google test account.
+2. In Chrome, open the extension popup and confirm **Backend: connected**. For a local setup,
+   the backend origin should be `http://localhost:5000`; no upload token is required unless
+   `PRESENCE_API_TOKEN` is configured in the backend.
+3. Join a Google Meet using a meeting code made from lowercase letters, numbers, or hyphens.
+   Before monitoring, tell participants what data is collected and share the notice shown in the
+   dashboard or extension.
+4. Confirm that the extension popup's **Last sync** updates. Open the professor dashboard and
+   select the meeting. Rows may take a few seconds to appear; the page refreshes automatically.
+5. Show the presence totals, use the overview buttons to filter the participant table, and open
+   the student view with a name that exactly matches a Meet participant.
+6. If appropriate for the demo, export the meeting CSV and then delete the meeting's server-side
+   records. Do not use real attendance data unless you have the required authorization.
+
+**Before presenting:** verify Google sign-in works, the extension is connected to the intended
+backend, the intended Meet is open, and the dashboard is showing the same meeting code. The
+extension and dashboard provide best-effort signals, not authoritative attendance proof. A
+missing participant row can also mean the name does not exactly match or the extension has not
+reported the participant yet.
+
+### 5. Deploy to Render
 
 The repository includes [`render.yaml`](./render.yaml) for a Render web service and PostgreSQL
 database, both configured on Render's **Free** plans. This keeps the service within the free

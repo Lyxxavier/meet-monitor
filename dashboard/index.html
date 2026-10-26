@@ -3,57 +3,62 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Meet Monitor</title>
+  <meta name="theme-color" content="#131520" />
+  <meta name="description" content="A clear, privacy-conscious presence dashboard for Google Meet." />
+  <title>Meet Monitor · Class presence, made clearer</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body data-page="index">
-  <header>
-    <div class="brand"><span class="brand-dot"></span> Meet Monitor</div>
-    <nav>
-      <a href="login.html" class="btn-secondary">Log in</a>
+  <header class="site-header">
+    <a class="brand" href="/" aria-label="Meet Monitor home">
+      <span class="brand-dot" aria-hidden="true"></span> Meet Monitor
+    </a>
+    <nav aria-label="Main navigation">
+      <a href="login.html" class="btn-primary">Sign in</a>
     </nav>
   </header>
 
   <main class="page">
     <section class="card hero">
-      <h1>Class presence, without the roll call.</h1>
-      <p class="muted">
-        The extension reads Google Meet participant tiles and reports who is present and
-        whether their mic appears on or muted. It does not record audio or video. Participants
-        should be notified before monitoring begins.
-      </p>
-      <div class="button-row">
-        <a class="btn-primary" href="login.html">Get started</a>
-        <a class="btn-secondary" href="professor.html">Open professor view</a>
+      <div class="hero-copy">
+        <p class="eyebrow">A clearer view of class presence</p>
+        <h1>Keep the class in view.</h1>
+        <p>
+          Follow meeting presence from one simple dashboard. See recent participant and
+          microphone status at a glance—without recording audio or video.
+        </p>
+        <div class="button-row">
+          <a class="btn-primary" href="login.html">Get started <span aria-hidden="true">→</span></a>
+          <a class="btn-secondary" href="#how-it-works">How it works</a>
+        </div>
       </div>
+      <aside class="hero-aside" aria-label="Privacy summary">
+        <span class="hero-aside-label">Designed for clarity</span>
+        <span class="hero-aside-mark" aria-hidden="true">M</span>
+        <p>Presence insights.<br />No audio or video recording.</p>
+      </aside>
     </section>
 
-    <section class="grid-3">
-      <article class="card">
-        <h2>1. Extension</h2>
-        <p class="muted">
-          Load the unpacked extension in Chrome, then join a Meet. It scans participant tiles
-          and only sends a snapshot when something changes.
-        </p>
+    <section id="how-it-works" class="feature-grid" aria-label="How Meet Monitor works">
+      <article class="card feature-card">
+        <span class="feature-number">01</span>
+        <h2>Connect your meeting</h2>
+        <p>The Chrome extension observes participant tiles while you’re in Google Meet.</p>
       </article>
-      <article class="card">
-        <h2>2. Backend</h2>
-        <p class="muted">
-          Flask accepts snapshots at <code>/api/presence</code> and stores them in SQLite.
-          Local development uses SQLite; hosted deployments use PostgreSQL.
-        </p>
+      <article class="card feature-card">
+        <span class="feature-number">02</span>
+        <h2>See useful signals</h2>
+        <p>View meeting-specific presence and microphone indicators in a clean dashboard.</p>
       </article>
-      <article class="card">
-        <h2>3. Dashboard</h2>
-        <p class="muted">
-          Students check their own status; professors watch the class table refresh every
-          five seconds and spot muted participants instantly.
-        </p>
+      <article class="card feature-card">
+        <span class="feature-number">03</span>
+        <h2>Stay transparent</h2>
+        <p>Share the participant notice before monitoring. Meet Monitor doesn’t capture audio or video.</p>
       </article>
     </section>
   </main>
 
-  <footer>Meet Monitor &middot; proof of concept</footer>
+  <footer>Meet Monitor <span aria-hidden="true">·</span> A presence monitoring demo</footer>
   <script src="script.js"></script>
 </body>
 </html>

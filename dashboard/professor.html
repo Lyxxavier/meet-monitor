@@ -3,14 +3,20 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#131520" />
   <title>Class presence &middot; Meet Monitor</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body data-page="professor">
-  <header>
-    <div class="brand"><span class="brand-dot"></span> Meet Monitor</div>
-    <nav>
-      <a href="student.html" class="btn-secondary">Student view</a>
+  <header class="site-header">
+    <a class="brand" href="/" aria-label="Meet Monitor home">
+      <span class="brand-dot" aria-hidden="true"></span> Meet Monitor
+    </a>
+    <nav aria-label="Account navigation">
+      <span class="account-chip" aria-label="Signed-in account">
+        <span class="account-role">Professor</span>
+        <span id="account-email">Loading account…</span>
+      </span>
       <a href="/logout" class="btn-secondary">Log out</a>
     </nav>
   </header>
@@ -19,9 +25,12 @@
     <div class="page-heading">
       <div>
         <h1>Class presence</h1>
-        <p class="muted">Meeting-scoped status. Participants may appear stale if updates stop.</p>
+        <p>Meeting-scoped status. Participants may appear stale if updates stop.</p>
       </div>
-      <span class="pill" id="refresh-state">Live</span>
+      <div class="refresh-indicator">
+        <span class="pill" id="refresh-state" role="status" aria-live="polite">Connecting</span>
+        <span id="last-refresh" class="refresh-meta">Waiting for data</span>
+      </div>
     </div>
 
     <section class="card privacy-notice">
@@ -29,7 +38,8 @@
         <h2>Participant notice</h2>
         <p id="participant-notice">
           Meet Monitor attendance monitoring is active for this meeting. It collects participant
-          names and identifiers, microphone-on or muted status, and timestamps. It does not record audio or video.
+          names and identifiers, microphone-on or muted status, and timestamps. It does not record
+          audio or video.
           Unexported records are retained until the professor exports them; exported records are
           automatically deleted after 15 days. Please share this notice with participants before
           monitoring begins.
@@ -57,32 +67,80 @@
       </article>
     </section>
 
+    <section class="card status-overview" aria-labelledby="status-overview-title">
+      <div class="table-heading">
+        <div>
+          <h2 id="status-overview-title">Presence overview</h2>
+          <p>Current participant signals in this meeting</p>
+        </div>
+        <span class="overview-caption">Latest status</span>
+      </div>
+      <div class="overview-content">
+        <div
+          id="presence-distribution"
+          class="distribution-bar"
+          role="img"
+          aria-label="Presence distribution"
+        >
+          <span id="distribution-active" class="distribution-segment active"></span>
+          <span id="distribution-idle" class="distribution-segment idle"></span>
+          <span id="distribution-other" class="distribution-segment other"></span>
+        </div>
+        <ul class="distribution-legend" aria-label="Filter participants by presence">
+          <li><button type="button" class="distribution-filter selected" data-status="all" aria-pressed="true">All <strong id="legend-total">0</strong></button></li>
+          <li><button type="button" class="distribution-filter" data-status="active" aria-pressed="false"><span class="legend-dot active"></span> Mic on <strong id="legend-active">0</strong></button></li>
+          <li><button type="button" class="distribution-filter" data-status="idle" aria-pressed="false"><span class="legend-dot idle"></span> Muted <strong id="legend-idle">0</strong></button></li>
+          <li><button type="button" class="distribution-filter" data-status="other" aria-pressed="false"><span class="legend-dot other"></span> Stale or left <strong id="legend-other">0</strong></button></li>
+        </ul>
+        <p class="overview-note">Presence and microphone indicators are best-effort signals; Meet may hide or rearrange participant tiles.</p>
+      </div>
+    </section>
+
     <section class="card meeting-controls">
       <label for="meeting-select">Meeting</label>
       <select id="meeting-select"></select>
-      <button id="export-meeting" class="btn-primary" type="button">Export CSV</button>
-      <button id="delete-meeting" class="btn-secondary" type="button">Delete records</button>
+      <button id="export-meeting" class="btn-primary" type="button">
+        <span aria-hidden="true">↓</span> Export CSV
+      </button>
+      <button id="delete-meeting" class="btn-secondary btn-danger" type="button">Delete records</button>
     </section>
 
-    <p id="message" class="error" hidden></p>
+    <section class="card meeting-context" aria-live="polite" aria-label="Selected meeting details">
+      <div>
+        <p class="eyebrow">Selected meeting</p>
+        <h2 id="meeting-title">No meeting selected</h2>
+        <p id="meeting-details" class="muted">Choose a meeting to view its details.</p>
+      </div>
+      <span id="meeting-export-state" class="meeting-export-state"></span>
+    </section>
 
-    <section class="card table-card">
-      <table class="professor-table" id="presence-table">
-        <thead>
-          <tr>
-            <th>Student</th>
-            <th>Status</th>
-            <th>Last update</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr><td colspan="3" class="empty">Loading&hellip;</td></tr>
-        </tbody>
-      </table>
+    <p id="message" class="error" role="status" aria-live="polite" hidden></p>
+
+    <section class="card table-card" aria-labelledby="table-title">
+      <div class="table-heading">
+        <div>
+          <h2 id="table-title">Participants</h2>
+          <p id="table-caption">Latest detected presence for this meeting</p>
+        </div>
+      </div>
+      <div class="table-wrap">
+        <table class="professor-table" id="presence-table">
+          <thead>
+            <tr>
+              <th scope="col">Participant</th>
+              <th scope="col">Microphone status</th>
+              <th scope="col">Last update</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td colspan="3" class="empty">Loading participants…</td></tr>
+          </tbody>
+        </table>
+      </div>
     </section>
   </main>
 
-  <footer>Meet Monitor &middot; proof of concept</footer>
+  <footer>Meet Monitor <span aria-hidden="true">·</span> A presence monitoring demo</footer>
   <script src="script.js"></script>
 </body>
 </html>

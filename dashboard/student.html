@@ -3,14 +3,20 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#131520" />
   <title>Your status &middot; Meet Monitor</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body data-page="student">
-  <header>
-    <div class="brand"><span class="brand-dot"></span> Meet Monitor</div>
-    <nav>
-      <a href="professor.html" class="btn-secondary">Professor view</a>
+  <header class="site-header">
+    <a class="brand" href="/" aria-label="Meet Monitor home">
+      <span class="brand-dot" aria-hidden="true"></span> Meet Monitor
+    </a>
+    <nav aria-label="Account navigation">
+      <span class="account-chip" aria-label="Signed-in account">
+        <span class="account-role">Student</span>
+        <span id="account-email">Loading account…</span>
+      </span>
       <a href="/logout" class="btn-secondary">Log out</a>
     </nav>
   </header>
@@ -21,7 +27,10 @@
         <h1>Your status</h1>
         <p class="muted">This is what your professor's dashboard shows for you.</p>
       </div>
-      <span class="pill" id="refresh-state">Live</span>
+      <div class="refresh-indicator">
+        <span class="pill" id="refresh-state" role="status" aria-live="polite">Connecting</span>
+        <span id="last-refresh" class="refresh-meta">Waiting for data</span>
+      </div>
     </div>
 
     <section class="card privacy-notice">
@@ -29,29 +38,33 @@
         <h2>Presence monitoring notice</h2>
         <p>
           This dashboard shows attendance information collected for a Google Meet meeting,
-          including participant names and identifiers, microphone-on or muted status, and timestamps. Audio and
-          video are not recorded by Meet Monitor. Unexported records are retained until the
+          including participant names and identifiers, microphone-on or muted status, and
+          timestamps. Audio and video are not recorded by Meet Monitor. Unexported records are retained until the
           professor exports them; exported records are automatically deleted after 15 days.
         </p>
       </div>
     </section>
 
-    <section class="card card-narrow">
+    <section class="card card-narrow profile-card">
+      <p class="eyebrow">Personalize your view</p>
       <h2>Your Meet display name</h2>
       <p class="muted">
-        Presence is keyed by the name shown in Google Meet. Set it below so this page can
-        filter your own rows.
+        Enter your name exactly as it appears in Google Meet. Matching is case- and
+        spacing-sensitive; this page checks only for that name.
       </p>
       <form id="name-form" class="inline-form">
         <input
           id="display-name"
           type="text"
           placeholder="e.g. Juan Dela Cruz"
+          maxlength="256"
+          required
           autocomplete="off"
           aria-label="Google Meet display name"
         />
         <button type="submit" class="btn-primary">Save</button>
       </form>
+      <p class="field-hint">For example, use “Juan Dela Cruz” if that is the display name shown on your Meet tile.</p>
     </section>
 
     <section class="card meeting-controls">
@@ -59,25 +72,42 @@
       <select id="meeting-select"></select>
     </section>
 
-    <p id="message" class="error" hidden></p>
+    <section class="card meeting-context" aria-live="polite" aria-label="Selected meeting details">
+      <div>
+        <p class="eyebrow">Selected meeting</p>
+        <h2 id="meeting-title">No meeting selected</h2>
+        <p id="meeting-details" class="muted">Choose a meeting to view its details.</p>
+      </div>
+      <span id="meeting-export-state" class="meeting-export-state"></span>
+    </section>
 
-    <section class="card table-card">
-      <table class="professor-table" id="presence-table">
-        <thead>
-          <tr>
-            <th>Student</th>
-            <th>Status</th>
-            <th>Last update</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr><td colspan="3" class="empty">Loading&hellip;</td></tr>
-        </tbody>
-      </table>
+    <p id="message" class="error" role="status" aria-live="polite" hidden></p>
+
+    <section class="card table-card" aria-labelledby="table-title">
+      <div class="table-heading">
+        <div>
+          <h2 id="table-title">Your presence</h2>
+          <p>Latest detected status for the selected meeting</p>
+        </div>
+      </div>
+      <div class="table-wrap">
+        <table class="professor-table" id="presence-table">
+          <thead>
+            <tr>
+              <th scope="col">Participant</th>
+              <th scope="col">Microphone status</th>
+              <th scope="col">Last update</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td colspan="3" class="empty">Loading your status…</td></tr>
+          </tbody>
+        </table>
+      </div>
     </section>
   </main>
 
-  <footer>Meet Monitor &middot; proof of concept</footer>
+  <footer>Meet Monitor <span aria-hidden="true">·</span> A presence monitoring demo</footer>
   <script src="script.js"></script>
 </body>
 </html>
