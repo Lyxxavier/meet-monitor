@@ -99,7 +99,8 @@ The chosen role is saved to the account and can be changed on a later Google sig
 ### 4. Deploy to Render
 
 The repository includes [`render.yaml`](./render.yaml) for a Render web service and PostgreSQL
-database.
+database, both configured on Render's **Free** plans. This keeps the service within the free
+compute tier, subject to Render's workspace usage limits and current pricing terms.
 
 1. Create a Google Cloud project and configure the OAuth consent screen for external Google
    accounts. During testing, add the intended Google accounts as test users; publish the consent
@@ -114,10 +115,18 @@ database.
 6. Load the unpacked extension, open its popup, set the service's HTTPS origin and the
    `PRESENCE_API_TOKEN` value from Render, and save. Chrome will ask permission to connect.
 
-The server uses the Render PostgreSQL connection string for durable storage, HTTPS-only session
+The server uses the Render PostgreSQL connection string for database storage, HTTPS-only session
 cookies, and Gunicorn (not Flask's development server). Do not commit `.env` or copy real
 credentials into source control. Render requires you to supply the Google OAuth client values;
 the service cannot be deployed with working sign-in until those are configured.
+
+**Free-tier limitations:** the web service spins down after 15 minutes without traffic and may
+take about a minute to wake up. Free Render PostgreSQL databases have a 1 GB limit and expire
+30 days after creation; after expiry, the database is inaccessible, and Render deletes it after
+the 14-day grace period unless upgraded. Free databases have no backups. This is suitable for a
+short-lived class project demo, not long-term attendance retention. Export any data you need and
+do not rely on the free database as a permanent record. Check Render's [current free-tier
+limits](https://render.com/docs/free) before deploying.
 
 ## How presence is detected
 

@@ -2,7 +2,7 @@ services:
   - type: web
     name: meet-monitor
     runtime: python
-    plan: starter
+    plan: free
     buildCommand: pip install -r backend/requirements.txt
     startCommand: gunicorn --chdir backend app:app --bind 0.0.0.0:$PORT --workers 1
     healthCheckPath: /health
@@ -26,4 +26,4 @@ databases:
   - name: meet-monitor-db
     databaseName: meet_monitor
     user: meet_monitor
-    plan: basic-256mb
+    plan: free
