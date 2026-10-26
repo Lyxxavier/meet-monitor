@@ -79,7 +79,7 @@ async function requestJson(url, options) {
 }
 
 function getCurrentMeetingId(meetings) {
-  const currentMeeting = meetings.find((meeting) => !meeting.ended_at);
+  const currentMeeting = meetings.find((meeting) => meeting.is_current);
   return currentMeeting ? String(currentMeeting.id) : '';
 }
 
@@ -159,11 +159,7 @@ function updateMeetingContext(meetings) {
   exportState.textContent = meeting.exported_at ? 'Exported' : 'Not exported';
   exportState.classList.toggle('is-exported', Boolean(meeting.exported_at));
   const isCurrent = String(meeting.id) === getCurrentMeetingId(meetings);
-  sessionState.textContent = meeting.ended_at
-    ? 'Archived session'
-    : isCurrent
-      ? 'Current session'
-      : 'Previous session';
+  sessionState.textContent = isCurrent ? 'Current session' : 'Archived session';
   sessionState.classList.toggle('is-current', isCurrent);
 }
 

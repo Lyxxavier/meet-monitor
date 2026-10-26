@@ -48,12 +48,25 @@ def meetings():
     conn = get_db()
     try:
         rows = conn.execute(
-            "SELECT id, meeting_code, started_at, ended_at, exported_at "
+            "SELECT id, meeting_code, started_at, ended_at, exported_at, "
+            "(SELECT MAX(timestamp) FROM presence_logs "
+            " WHERE meeting_id = meetings.id) AS last_activity_at "
             "FROM meetings ORDER BY started_at DESC, id DESC"
         ).fetchall()
     finally:
         conn.close()
-    return jsonify([dict(row) for row in rows])
+    now = int(time.time())
+    meetings_list = []
+    for row in rows:
+        item = dict(row)
+        item["is_current"] = (
+            not item["ended_at"]
+            and item["last_activity_at"] is not None
+            and now - item["last_activity_at"] >= -60
+            and now - item["last_activity_at"] <= STALE_AFTER_SECONDS
+        )
+        meetings_list.append(item)
+    return jsonify(meetings_list)
 
 
 @reports_bp.route("/reports", methods=["GET"])

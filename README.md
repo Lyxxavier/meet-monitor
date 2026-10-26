@@ -80,7 +80,7 @@ Useful pages:
 | `/login.html` | Google sign-in and role selection |
 | `/student.html` | Student's own status |
 | `/professor.html` | Class-wide monitoring |
-| `/api/meetings` | Meeting sessions (JSON) |
+| `/api/meetings` | Meeting sessions, recent activity, and current/archive state (JSON) |
 | `/api/reports` | Latest status per participant (JSON) |
 | `/api/reports/history` | Recent raw presence rows (JSON) |
 | `POST /api/reports/export` | Export a meeting's presence events as CSV |
@@ -120,9 +120,10 @@ For a live demo, use the backend and dashboard together with the unpacked extens
    dashboard or extension.
 4. Confirm that the extension popup's **Last sync** updates. Open the professor dashboard and
    confirm the current meeting is selected. Each Meet session has its own participant list. When
-   a session ends, it is removed from the default Participants view but its records remain
-   archived and selectable in the meeting list. **Show current session** returns to the active
-   session. Rows may take a few seconds to appear; the page refreshes automatically.
+   a session ends, or stops sending updates for 45 seconds, it is removed from the default
+   Participants view while its records remain archived and selectable in the meeting list.
+   **Show current session** returns to the active session. Rows may take a few seconds to appear;
+   the page refreshes automatically.
 5. Show the presence totals, use the overview buttons to filter the participant table, and open
    the student view with a name that exactly matches a Meet participant.
 6. If appropriate for the demo, export the meeting CSV and then delete the meeting's server-side

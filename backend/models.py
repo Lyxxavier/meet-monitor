@@ -70,6 +70,8 @@ POSTGRES_SCHEMA = (
     "CREATE UNIQUE INDEX IF NOT EXISTS idx_meetings_session_key ON meetings (session_key)",
     "CREATE INDEX IF NOT EXISTS idx_presence_meeting_participant "
     "ON presence_logs (meeting_id, participant_id, timestamp)",
+    "CREATE INDEX IF NOT EXISTS idx_presence_meeting_timestamp "
+    "ON presence_logs (meeting_id, timestamp)",
     "CREATE INDEX IF NOT EXISTS idx_meetings_exported_at ON meetings (exported_at)",
 )
 
@@ -149,6 +151,10 @@ def init_db():
             conn.execute(
                 "CREATE INDEX IF NOT EXISTS idx_presence_meeting_participant "
                 "ON presence_logs (meeting_id, participant_id, timestamp)"
+            )
+            conn.execute(
+                "CREATE INDEX IF NOT EXISTS idx_presence_meeting_timestamp "
+                "ON presence_logs (meeting_id, timestamp)"
             )
             conn.execute(
                 "CREATE INDEX IF NOT EXISTS idx_meetings_exported_at "
