@@ -1,0 +1,27 @@
+1
+00:00:00,000 --> 00:00:08,548
+Meet Monitor helps instructors view best-effort presence signals from a Google Meet session. It does not record audio or video.
+
+2
+00:00:09,348 --> 00:00:19,056
+Sign in with Google, then choose a student or professor view. In this proof of concept, professor access is open to any signed-in account.
+
+3
+00:00:19,856 --> 00:00:28,899
+The browser extension watches Meet participant tiles and sends names, identifiers, microphone state, and timestamps to the demo backend.
+
+4
+00:00:29,699 --> 00:00:40,266
+The professor dashboard shows one meeting session at a time. The overview gives quick totals, and the controls filter participants by microphone and attendance state.
+
+5
+00:00:41,066 --> 00:00:51,724
+When a session ends, or stops sending updates for 45 seconds, its rows leave the current view. The session remains archived and selectable for review.
+
+6
+00:00:52,524 --> 00:00:57,597
+Students can check the row matching their exact Meet display name in the student view.
+
+7
+00:00:58,397 --> 00:01:08,105
+Meet's interface can change, so these signals are best-effort, not authoritative attendance proof. This is a classroom proof of concept.
