@@ -3,6 +3,7 @@ const backendEl = document.getElementById('backend');
 const lastSyncEl = document.getElementById('last-sync');
 const queuedEl = document.getElementById('queued');
 const backendInput = document.getElementById('backend-origin');
+const tokenInput = document.getElementById('upload-token');
 const settingMessage = document.getElementById('setting-message');
 const dashboardLink = document.getElementById('dashboard-link');
 
@@ -35,9 +36,10 @@ function normalizeBackendOrigin(value) {
 }
 
 async function loadBackendSetting() {
-  const settings = await chrome.storage.local.get('backendOrigin');
+  const settings = await chrome.storage.local.get(['backendOrigin', 'uploadToken']);
   const origin = settings.backendOrigin || DEFAULT_BACKEND_ORIGIN;
   backendInput.value = origin;
+  tokenInput.value = settings.uploadToken || '';
   updateDashboardLink(origin);
 }
 
@@ -46,13 +48,20 @@ document.getElementById('backend-form').addEventListener('submit', async (event)
   settingMessage.textContent = '';
   try {
     const origin = normalizeBackendOrigin(backendInput.value.trim());
+    const uploadToken = tokenInput.value.trim();
+    if (origin !== DEFAULT_BACKEND_ORIGIN && !uploadToken) {
+      throw new Error('Enter the deployed backend’s PRESENCE_API_TOKEN.');
+    }
     const permission =
       origin === DEFAULT_BACKEND_ORIGIN ||
       (await chrome.permissions.request({ origins: [`${origin}/*`] }));
     if (!permission) {
       throw new Error('Permission to connect to that server was not granted.');
     }
-    await chrome.storage.local.set({ backendOrigin: origin });
+    await chrome.storage.local.set({
+      backendOrigin: origin,
+      uploadToken,
+    });
     backendInput.value = origin;
     updateDashboardLink(origin);
     settingMessage.textContent = 'Backend saved.';

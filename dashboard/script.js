@@ -256,11 +256,16 @@ function initLogin() {
   const form = document.getElementById('login-form');
   if (!form) return;
 
-  form.addEventListener('submit', () => {
-    const email = document.getElementById('email');
-    if (email && email.value.trim()) {
-      localStorage.setItem('meetMonitorEmail', email.value.trim());
-    }
+  const error = new URLSearchParams(window.location.search).get('error');
+  if (error) {
+    document.getElementById('login-error').textContent = error;
+    document.getElementById('login-error').hidden = false;
+  }
+
+  form.addEventListener('submit', (event) => {
+    event.preventDefault();
+    const role = document.getElementById('role').value;
+    window.location.assign(`/login/google?role=${encodeURIComponent(role)}`);
   });
 }
 

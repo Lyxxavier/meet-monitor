@@ -17,20 +17,22 @@
   <main class="page">
     <section class="card card-narrow">
       <h1>Log in</h1>
-      <p class="muted">Pick a role to continue. This is a demo login &mdash; no password, no OAuth.</p>
+      <p class="muted">
+        Sign in with any Google account, including personal Gmail. Choose your Meet Monitor role;
+        you can choose a different role the next time you sign in.
+      </p>
 
-      <form id="login-form" class="form" action="/login" method="post">
-        <label for="email">School email</label>
-        <input id="email" name="email" type="email" placeholder="you@school.edu" required />
-
+      <form id="login-form" class="form">
         <label for="role">Role</label>
         <select id="role" name="role">
           <option value="student">Student</option>
           <option value="professor">Professor</option>
         </select>
 
-        <button type="submit" class="btn-primary btn-block">Continue</button>
+        <button type="submit" class="btn-primary btn-block">Continue with Google</button>
       </form>
+      <p id="login-error" class="error" role="alert" hidden></p>
+      <p class="muted">Google confirms your account. Meet Monitor does not receive your Google password.</p>
     </section>
   </main>
 

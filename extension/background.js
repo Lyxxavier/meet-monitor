@@ -19,17 +19,20 @@ async function flush() {
   queue = [];
   const grouped = new Map();
   for (const item of batch) {
-    const key = `${item.backendOrigin}:${item.meetingCode}:${item.sessionKey}`;
+    const key = `${item.backendOrigin}:${item.meetingCode}:${item.sessionKey}:${item.uploadToken}`;
     if (!grouped.has(key)) grouped.set(key, []);
     grouped.get(key).push(item);
   }
 
   for (const items of grouped.values()) {
-    const { backendOrigin, meetingCode, sessionKey } = items[0];
+    const { backendOrigin, uploadToken, meetingCode, sessionKey } = items[0];
     try {
       const response = await fetch(getBackendUrl(backendOrigin), {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          ...(uploadToken ? { Authorization: `Bearer ${uploadToken}` } : {}),
+        },
         body: JSON.stringify({
           meetingCode,
           sessionKey,
@@ -66,11 +69,13 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
       return false;
     }
     chrome.storage.local
-      .get('backendOrigin')
+      .get(['backendOrigin', 'uploadToken'])
       .then((settings) => {
         const backendOrigin = settings.backendOrigin || DEFAULT_BACKEND_ORIGIN;
+        const uploadToken = settings.uploadToken || '';
         const entries = message.entries.map((entry) => ({
           backendOrigin,
+          uploadToken,
           meetingCode: message.meetingCode,
           sessionKey: message.sessionKey,
           entry,

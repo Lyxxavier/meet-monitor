@@ -1,11 +1,13 @@
 """Endpoint the extension POSTs meeting-scoped activity to."""
 
+import hmac
 import math
 import re
 import time
 
 from flask import Blueprint, jsonify, request
 
+from config import PRESENCE_API_TOKEN
 from models import get_db
 
 presence_bp = Blueprint("presence", __name__)
@@ -31,6 +33,14 @@ def _to_seconds(timestamp):
 
 @presence_bp.route("/presence", methods=["POST"])
 def log_presence():
+    if PRESENCE_API_TOKEN:
+        authorization = request.headers.get("Authorization", "")
+        supplied_token = authorization.removeprefix("Bearer ").strip()
+        if not authorization.startswith("Bearer ") or not hmac.compare_digest(
+            supplied_token, PRESENCE_API_TOKEN
+        ):
+            return jsonify({"error": "valid extension upload token required"}), 401
+
     payload = request.get_json(silent=True)
     if not isinstance(payload, dict):
         return jsonify({"error": "expected a meeting-scoped JSON object"}), 400
