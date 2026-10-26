@@ -12,3 +12,4 @@ SECRET_KEY = os.environ.get("MEET_MONITOR_SECRET", "dev-secret-change-me")
 
 HOST = os.environ.get("MEET_MONITOR_HOST", "127.0.0.1")
 PORT = int(os.environ.get("MEET_MONITOR_PORT", "5000"))
+EXPORT_RETENTION_SECONDS = 15 * 24 * 60 * 60

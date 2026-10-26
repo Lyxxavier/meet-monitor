@@ -149,6 +149,18 @@ header nav a.btn-secondary:hover {
   text-transform: capitalize;
 }
 
+.badge-stale,
+.badge-left {
+  background: #EEEEEE;
+  color: #424242;
+  border: 1px solid #BDBDBD;
+  padding: 3px 9px;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: capitalize;
+}
+
 .card {
   background: #FFFFFF;
   border-top: 4px solid var(--red);
@@ -240,6 +252,46 @@ header nav a.btn-secondary:hover {
   margin-bottom: 20px;
 }
 
+.privacy-notice {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 20px;
+  border-top-color: var(--yellow);
+}
+
+.privacy-notice h2 {
+  margin: 0 0 6px;
+  font-size: 1.05rem;
+}
+
+.privacy-notice p {
+  margin: 0;
+  line-height: 1.5;
+}
+
+.meeting-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.meeting-controls label {
+  font-weight: 700;
+  color: var(--red-dark);
+}
+
+.meeting-controls select {
+  flex: 1;
+  min-width: 180px;
+  font: inherit;
+  padding: 9px 10px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+}
+
 .stat {
   border-top-color: var(--yellow);
   display: flex;
@@ -320,6 +372,16 @@ table.professor-table tr.inactive-flag:hover {
   margin: 0 0 20px;
 }
 
+.success-message {
+  background: var(--active-tint);
+  border-left: 4px solid #2E7D32;
+  color: #1B5E20;
+  padding: 12px 16px;
+  border-radius: 6px;
+  font-weight: 600;
+  margin: 0 0 20px;
+}
+
 .form {
   display: flex;
   flex-direction: column;
@@ -393,6 +455,12 @@ footer {
   }
 
   .inline-form {
+    flex-direction: column;
+  }
+
+  .privacy-notice,
+  .meeting-controls {
+    align-items: stretch;
     flex-direction: column;
   }
 }

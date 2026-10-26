@@ -16,7 +16,7 @@
 
     body {
       margin: 0;
-      width: 280px;
+      width: 320px;
       font-family: system-ui, sans-serif;
       color: var(--text);
       background: #FFFFFF;
@@ -58,6 +58,48 @@
     .status.ok { color: #2E7D32; }
     .status.warn { color: var(--red); }
 
+    .privacy {
+      margin: 12px 0 0;
+      padding: 10px;
+      background: #FFF8E1;
+      border-left: 3px solid var(--yellow);
+      font-size: 12px;
+      line-height: 1.45;
+    }
+
+    .settings {
+      display: grid;
+      gap: 7px;
+      margin-top: 14px;
+      font-size: 12px;
+    }
+
+    .settings label { font-weight: 700; }
+
+    .settings input {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #CCCCCC;
+      border-radius: 5px;
+      font: inherit;
+    }
+
+    .settings button {
+      padding: 8px;
+      border: 0;
+      border-radius: 5px;
+      background: var(--yellow);
+      font: inherit;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    #setting-message {
+      margin: 0;
+      color: var(--red);
+      line-height: 1.4;
+    }
+
     a {
       display: block;
       text-align: center;
@@ -87,7 +129,18 @@
       <span class="label">Queued updates</span>
       <span id="queued">0</span>
     </div>
-    <a href="http://localhost:5000/professor.html" target="_blank" rel="noopener">Open dashboard</a>
+    <p class="privacy">
+      When active in a Meet, this extension sends participant names and identifiers, mic status,
+      and timestamps to the configured Meet Monitor server. It does not record audio or video.
+      Inform all participants before monitoring.
+    </p>
+    <form class="settings" id="backend-form">
+      <label for="backend-origin">Backend origin</label>
+      <input id="backend-origin" type="url" value="http://localhost:5000" required />
+      <button type="submit">Save backend</button>
+      <p id="setting-message" role="status" aria-live="polite"></p>
+    </form>
+    <a id="dashboard-link" href="http://localhost:5000/professor.html" target="_blank" rel="noopener">Open dashboard</a>
   </main>
   <script src="popup.js"></script>
 </body>

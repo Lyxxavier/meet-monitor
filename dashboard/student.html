@@ -24,6 +24,18 @@
       <span class="pill" id="refresh-state">Live</span>
     </div>
 
+    <section class="card privacy-notice">
+      <div>
+        <h2>Presence monitoring notice</h2>
+        <p>
+          This dashboard shows attendance information collected for a Google Meet meeting,
+          including participant names and identifiers, microphone-on or muted status, and timestamps. Audio and
+          video are not recorded by Meet Monitor. Unexported records are retained until the
+          professor exports them; exported records are automatically deleted after 15 days.
+        </p>
+      </div>
+    </section>
+
     <section class="card card-narrow">
       <h2>Your Meet display name</h2>
       <p class="muted">
@@ -40,6 +52,11 @@
         />
         <button type="submit" class="btn-primary">Save</button>
       </form>
+    </section>
+
+    <section class="card meeting-controls">
+      <label for="meeting-select">Meeting</label>
+      <select id="meeting-select"></select>
     </section>
 
     <p id="message" class="error" hidden></p>

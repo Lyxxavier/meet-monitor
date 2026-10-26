@@ -1,11 +1,14 @@
 """Flask entrypoint - wires up the routes and serves the dashboard."""
 
 import os
+import sqlite3
+import threading
+import time
 
 from flask import Flask, jsonify, request, send_from_directory
 
 from config import HOST, PORT, SECRET_KEY
-from models import init_db
+from models import init_db, purge_expired_exports
 from routes.login import login_bp
 from routes.presence import presence_bp
 from routes.reports import reports_bp
@@ -47,6 +50,19 @@ def not_found(_error):
 
 
 init_db()
+purge_expired_exports()
+
+
+def _retention_worker():
+    while True:
+        time.sleep(60 * 60)
+        try:
+            purge_expired_exports()
+        except sqlite3.Error:
+            app.logger.exception("Failed to purge expired exported meetings")
+
+
+threading.Thread(target=_retention_worker, daemon=True).start()
 
 if __name__ == "__main__":
     app.run(host=HOST, port=PORT, debug=True)

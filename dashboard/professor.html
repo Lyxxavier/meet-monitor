@@ -19,10 +19,24 @@
     <div class="page-heading">
       <div>
         <h1>Class presence</h1>
-        <p class="muted">Live status for everyone the extension has seen. Refreshes every 5 seconds.</p>
+        <p class="muted">Meeting-scoped status. Participants may appear stale if updates stop.</p>
       </div>
       <span class="pill" id="refresh-state">Live</span>
     </div>
+
+    <section class="card privacy-notice">
+      <div>
+        <h2>Participant notice</h2>
+        <p id="participant-notice">
+          Meet Monitor attendance monitoring is active for this meeting. It collects participant
+          names and identifiers, microphone-on or muted status, and timestamps. It does not record audio or video.
+          Unexported records are retained until the professor exports them; exported records are
+          automatically deleted after 15 days. Please share this notice with participants before
+          monitoring begins.
+        </p>
+      </div>
+      <button id="copy-notice" class="btn-secondary" type="button">Copy notice</button>
+    </section>
 
     <section class="grid-3 stats">
       <article class="card stat">
@@ -37,6 +51,17 @@
         <span class="stat-value" id="stat-idle">0</span>
         <span class="stat-label">Mic muted</span>
       </article>
+      <article class="card stat">
+        <span class="stat-value" id="stat-not-current">0</span>
+        <span class="stat-label">Stale or left</span>
+      </article>
+    </section>
+
+    <section class="card meeting-controls">
+      <label for="meeting-select">Meeting</label>
+      <select id="meeting-select"></select>
+      <button id="export-meeting" class="btn-primary" type="button">Export CSV</button>
+      <button id="delete-meeting" class="btn-secondary" type="button">Delete records</button>
     </section>
 
     <p id="message" class="error" hidden></p>
