@@ -1,6 +1,6 @@
 """Google OpenID Connect sign-in for verified Google accounts."""
 
-from flask import Blueprint, jsonify, redirect, request, session, url_for
+from flask import Blueprint, current_app, jsonify, redirect, request, session, url_for
 from authlib.integrations.base_client.errors import OAuthError
 from authlib.integrations.flask_client import OAuth
 
@@ -35,7 +35,12 @@ def google_callback():
     try:
         token = client.authorize_access_token()
         user_info = token.get("userinfo") or client.userinfo()
-    except OAuthError:
+    except OAuthError as error:
+        current_app.logger.warning(
+            "Google OAuth callback failed (error=%s, description=%s)",
+            error.error,
+            error.description,
+        )
         return redirect("/login.html?error=Google+sign-in+was+cancelled+or+failed")
 
     email = str(user_info.get("email") or "").strip().lower()
