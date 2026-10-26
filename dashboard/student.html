@@ -70,6 +70,9 @@
     <section class="card meeting-controls">
       <label for="meeting-select">Meeting</label>
       <select id="meeting-select"></select>
+      <button id="follow-latest" class="btn-secondary" type="button" disabled>
+        Show current session
+      </button>
     </section>
 
     <section class="card meeting-context" aria-live="polite" aria-label="Selected meeting details">
@@ -79,6 +82,7 @@
         <p id="meeting-details" class="muted">Choose a meeting to view its details.</p>
       </div>
       <span id="meeting-export-state" class="meeting-export-state"></span>
+      <span id="meeting-session-state" class="meeting-session-state"></span>
     </section>
 
     <p id="message" class="error" role="status" aria-live="polite" hidden></p>
@@ -87,7 +91,7 @@
       <div class="table-heading">
         <div>
           <h2 id="table-title">Your presence</h2>
-          <p>Latest detected status for the selected meeting</p>
+          <p>Latest detected status for the selected meeting session</p>
         </div>
       </div>
       <div class="table-wrap">

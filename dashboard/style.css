@@ -844,6 +844,27 @@ h2 {
   color: #83d9a6;
 }
 
+.meeting-session-state {
+  flex: 0 0 auto;
+  padding: 5px 9px;
+  border: 1px solid #414352;
+  border-radius: 999px;
+  background: #292c38;
+  color: #c0c2ce;
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+.meeting-session-state:empty {
+  display: none;
+}
+
+.meeting-session-state.is-current {
+  border-color: #355542;
+  background: var(--green-soft);
+  color: #83d9a6;
+}
+
 .meeting-controls {
   margin-bottom: 20px;
   padding: 15px 17px;
@@ -1142,6 +1163,10 @@ footer {
   }
 
   .meeting-export-state {
+    align-self: flex-start;
+  }
+
+  .meeting-session-state {
     align-self: flex-start;
   }
 

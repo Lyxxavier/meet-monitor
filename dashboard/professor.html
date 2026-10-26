@@ -25,7 +25,7 @@
     <div class="page-heading">
       <div>
         <h1>Class presence</h1>
-        <p>Meeting-scoped status. Participants may appear stale if updates stop.</p>
+        <p>Each Meet session has its own participant list. Ended sessions are archived for review.</p>
       </div>
       <div class="refresh-indicator">
         <span class="pill" id="refresh-state" role="status" aria-live="polite">Connecting</span>
@@ -99,6 +99,9 @@
     <section class="card meeting-controls">
       <label for="meeting-select">Meeting</label>
       <select id="meeting-select"></select>
+      <button id="follow-latest" class="btn-secondary" type="button" disabled>
+        Show current session
+      </button>
       <button id="export-meeting" class="btn-primary" type="button">
         <span aria-hidden="true">↓</span> Export CSV
       </button>
@@ -112,6 +115,7 @@
         <p id="meeting-details" class="muted">Choose a meeting to view its details.</p>
       </div>
       <span id="meeting-export-state" class="meeting-export-state"></span>
+      <span id="meeting-session-state" class="meeting-session-state"></span>
     </section>
 
     <p id="message" class="error" role="status" aria-live="polite" hidden></p>
@@ -120,7 +124,7 @@
       <div class="table-heading">
         <div>
           <h2 id="table-title">Participants</h2>
-          <p id="table-caption">Latest detected presence for this meeting</p>
+          <p id="table-caption">Latest detected presence for the selected meeting session</p>
         </div>
       </div>
       <div class="table-wrap">

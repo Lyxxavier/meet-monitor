@@ -5,6 +5,7 @@ const page = document.body.dataset.page || 'index';
 const state = {
   studentName: localStorage.getItem('meetMonitorName') || '',
   meetingId: '',
+  followLatestMeeting: true,
   meetings: [],
   presenceRows: [],
   presenceFilter: 'all',
@@ -77,6 +78,11 @@ async function requestJson(url, options) {
   return response.json();
 }
 
+function getCurrentMeetingId(meetings) {
+  const currentMeeting = meetings.find((meeting) => !meeting.ended_at);
+  return currentMeeting ? String(currentMeeting.id) : '';
+}
+
 async function loadMeetings() {
   const select = document.getElementById('meeting-select');
   if (!select) return;
@@ -85,10 +91,13 @@ async function loadMeetings() {
   state.meetings = meetings;
   const previousId = state.meetingId || select.value;
   select.replaceChildren();
-  if (!meetings.length) {
+  const currentMeetingId = getCurrentMeetingId(meetings);
+  if (!meetings.length || !currentMeetingId) {
     const option = document.createElement('option');
     option.value = '';
-    option.textContent = 'No meetings recorded yet';
+    option.textContent = meetings.length
+      ? 'No active session — choose an archived meeting'
+      : 'No meetings recorded yet';
     option.disabled = true;
     option.selected = true;
     select.append(option);
@@ -96,20 +105,26 @@ async function loadMeetings() {
   for (const meeting of meetings) {
     const option = document.createElement('option');
     option.value = String(meeting.id);
+    const isCurrent = String(meeting.id) === currentMeetingId;
     option.textContent = `${meeting.meeting_code} · ${new Date(
       meeting.started_at * 1000
-    ).toLocaleString()}${meeting.exported_at ? ' · exported' : ''}`;
+    ).toLocaleString()}${meeting.ended_at ? ' · ended' : isCurrent ? ' · current' : ' · archived'}`;
     select.append(option);
   }
 
-  const nextId = meetings.some((meeting) => String(meeting.id) === previousId)
-    ? previousId
-    : meetings.length
-      ? String(meetings[0].id)
-      : '';
+  const previousMeetingExists = meetings.some(
+    (meeting) => String(meeting.id) === previousId
+  );
+  const latestId = currentMeetingId;
+  const nextId =
+    state.followLatestMeeting || !previousMeetingExists ? latestId : previousId;
   state.meetingId = nextId;
   select.value = nextId;
   updateMeetingContext(meetings);
+  const followLatestButton = document.getElementById('follow-latest');
+  if (followLatestButton) {
+    followLatestButton.disabled = state.followLatestMeeting || !latestId;
+  }
   for (const buttonId of ['export-meeting', 'delete-meeting']) {
     const button = document.getElementById(buttonId);
     if (button) button.disabled = !nextId;
@@ -120,14 +135,17 @@ function updateMeetingContext(meetings) {
   const title = document.getElementById('meeting-title');
   const details = document.getElementById('meeting-details');
   const exportState = document.getElementById('meeting-export-state');
-  if (!title || !details || !exportState) return;
+  const sessionState = document.getElementById('meeting-session-state');
+  if (!title || !details || !exportState || !sessionState) return;
 
   const meeting = meetings.find((item) => String(item.id) === state.meetingId);
   if (!meeting) {
-    title.textContent = 'No meeting selected';
-    details.textContent = 'New meeting details will appear here when available.';
+    title.textContent = 'No active meeting';
+    details.textContent = 'Ended sessions are archived. Select one from the meeting list to review its records.';
     exportState.textContent = '';
     exportState.classList.remove('is-exported');
+    sessionState.textContent = '';
+    sessionState.classList.remove('is-current');
     return;
   }
 
@@ -140,6 +158,13 @@ function updateMeetingContext(meetings) {
   details.textContent = parts.join(' · ');
   exportState.textContent = meeting.exported_at ? 'Exported' : 'Not exported';
   exportState.classList.toggle('is-exported', Boolean(meeting.exported_at));
+  const isCurrent = String(meeting.id) === getCurrentMeetingId(meetings);
+  sessionState.textContent = meeting.ended_at
+    ? 'Archived session'
+    : isCurrent
+      ? 'Current session'
+      : 'Previous session';
+  sessionState.classList.toggle('is-current', isCurrent);
 }
 
 async function fetchPresence(student) {
@@ -199,7 +224,7 @@ function updateStats(rows) {
   }
 }
 
-function renderProfessorTable() {
+function renderProfessorTable(emptyMessage = '') {
   const filteredRows = state.presenceRows.filter((row) => {
     if (state.presenceFilter === 'all') return true;
     if (state.presenceFilter === 'other') {
@@ -219,9 +244,10 @@ function renderProfessorTable() {
   }
   renderTable(
     filteredRows,
-    state.presenceRows.length
-      ? `No ${filterLabel} in this meeting. Choose another presence filter to see more participants.`
-      : 'No presence data recorded for this meeting yet.'
+    emptyMessage ||
+      (state.presenceRows.length
+        ? `No ${filterLabel} in this meeting. Choose another presence filter to see more participants.`
+        : 'No presence data recorded for this meeting yet.')
   );
 }
 
@@ -238,6 +264,16 @@ function setPresenceFilter(filter) {
 async function refreshProfessor(successMessage = '') {
   try {
     await loadMeetings();
+    if (!state.meetingId) {
+      state.presenceRows = [];
+      updateStats([]);
+      renderProfessorTable(
+        'No active session. Ended sessions are available in the meeting selector.'
+      );
+      showMessage(successMessage, false);
+      markRefreshSuccess();
+      return;
+    }
     const rows = await fetchPresence();
     state.presenceRows = rows;
     updateStats(rows);
@@ -268,6 +304,13 @@ async function refreshStudent() {
       [],
       'No meetings have been recorded yet. Your status will appear here after a meeting is reported.'
     );
+    showMessage('');
+    markRefreshSuccess();
+    return;
+  }
+
+  if (!state.meetingId) {
+    renderTable([], 'No active session. Ended sessions are available in the meeting selector.');
     showMessage('');
     markRefreshSuccess();
     return;
@@ -314,6 +357,12 @@ function initStudent() {
 
   document.getElementById('meeting-select')?.addEventListener('change', (event) => {
     state.meetingId = event.target.value;
+    state.followLatestMeeting =
+      state.meetingId === String(state.meetings[0]?.id || '');
+    refreshStudent();
+  });
+  document.getElementById('follow-latest')?.addEventListener('click', () => {
+    state.followLatestMeeting = true;
     refreshStudent();
   });
 }
@@ -373,6 +422,12 @@ async function deleteMeeting() {
 function initProfessor() {
   document.getElementById('meeting-select')?.addEventListener('change', (event) => {
     state.meetingId = event.target.value;
+    state.followLatestMeeting =
+      state.meetingId === String(state.meetings[0]?.id || '');
+    refreshProfessor();
+  });
+  document.getElementById('follow-latest')?.addEventListener('click', () => {
+    state.followLatestMeeting = true;
     refreshProfessor();
   });
   document.getElementById('export-meeting')?.addEventListener('click', exportMeeting);

@@ -119,7 +119,10 @@ For a live demo, use the backend and dashboard together with the unpacked extens
    Before monitoring, tell participants what data is collected and share the notice shown in the
    dashboard or extension.
 4. Confirm that the extension popup's **Last sync** updates. Open the professor dashboard and
-   select the meeting. Rows may take a few seconds to appear; the page refreshes automatically.
+   confirm the current meeting is selected. Each Meet session has its own participant list. When
+   a session ends, it is removed from the default Participants view but its records remain
+   archived and selectable in the meeting list. **Show current session** returns to the active
+   session. Rows may take a few seconds to appear; the page refreshes automatically.
 5. Show the presence totals, use the overview buttons to filter the participant table, and open
    the student view with a name that exactly matches a Meet participant.
 6. If appropriate for the demo, export the meeting CSV and then delete the meeting's server-side
